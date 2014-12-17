@@ -1,0 +1,113 @@
+Objective:
+----------
+
+We are going to make a model to predict the manner in which the people did the exercise as Classe variable.
+We have consider only those variables which make significance for the prediction of the output.
+
+Data Cleaning and Preparation:
+------------------------------
+
+Data partition from training data (https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv) is used for the training purpose.
+ Initially data have 160 variables in data set.
+First those variables are dropped which have more than 50% data as NA's data. After this step only 93 variables are left in the data set.
+
+In the second step those variables are dropped which doesn't make any sense for the output result, for example user_name, raw_timestamp_part_1,raw_timestamp_part_2, cvtd_timestamp, new_window, num_window, kurtosis_yaw_forearm, skewness_yaw_forearm, amplitude_yaw_forearm,  kurtosis_yaw_dumbbell, skewness_yaw_dumbbell, amplitude_yaw_dumbbell,kurtosis_roll_belt, kurtosis_picth_belt, skewness_roll_belt, skewness_roll_belt.1,max_yaw_belt, min_yaw_belt, kurtosis_roll_arm, kurtosis_picth_arm, kurtosis_yaw_arm,skewness_roll_arm, skewness_pitch_arm, skewness_yaw_arm, kurtosis_roll_dumbbell, kurtosis_picth_dumbbell,skewness_roll_dumbbell, skewness_pitch_dumbbell, max_yaw_dumbbell, min_yaw_dumbbell,kurtosis_roll_forearm, kurtosis_picth_forearm, skewness_roll_forearm, skewness_pitch_forearm,max_yaw_forearm, min_yaw_forearmdoesn't make any sense for the prediction of the output.
+
+After this step only 53 variables are left.
+
+Now this data is divided into two partitions on the basis of classe variable with 80% for training and 20% for testing.
+
+Model and Model Accuracy:
+-------------------------
+
+randomForest model with 500 decision trees is used for the training purpose of the model.
+
+Confusion Matrix for the model accuracy on training data is:
+
+     A    B    C    D    E class.error
+A 4461    2    0    0    1 0.000672043
+B    8 3026    4    0    0 0.003949967
+C    0   10 2726    2    0 0.004382761
+D    0    0   25 2546    2 0.010493587
+E    0    0    1    6 2879 0.002425502
+
+and on the testing data (created from the training data)  is:
+
+     A   B   C   D   E class.error
+A 1116   2   0   0   0 0.001788909
+B    0 756   5   0   0 0.006570302
+C    0   1 679   6   0 0.010204082
+D    0   0   0 637   2 0.003129890
+E    0   0   0   0 719 0.000000000
+
+So the prediction error is highest for the D class for the training data and for the class C for test data, and lowest for class A in training data and for class E in test data.
+
+Overall accuracy on insample training data = 99.61144%
+Overall accuracy  on insample testing data = 99.59215%
+
+Importance of Feature Variables:
+--------------------------------
+
+Features are sorted by Gini Index for every variable.
+
+                     MeanDecreaseGini
+roll_belt                  1009.34398
+pitch_belt                  574.37027
+yaw_belt                    724.60031
+total_accel_belt            171.90832
+gyros_belt_x                 78.95752
+gyros_belt_y                 88.80664
+gyros_belt_z                249.42168
+accel_belt_x                 92.44401
+accel_belt_y                 95.80550
+accel_belt_z                321.42764
+magnet_belt_x               204.94836
+magnet_belt_y               292.81149
+magnet_belt_z               320.82785
+roll_arm                    260.34769
+pitch_arm                   135.54291
+yaw_arm                     202.42710
+total_accel_arm              83.53522
+gyros_arm_x                 106.87812
+gyros_arm_y                 109.06063
+gyros_arm_z                  44.99153
+accel_arm_x                 184.40289
+accel_arm_y                 121.73947
+accel_arm_z                 104.56096
+magnet_arm_x                197.30866
+magnet_arm_y                184.43906
+magnet_arm_z                142.91163
+roll_dumbbell               324.65977
+pitch_dumbbell              142.14789
+yaw_dumbbell                204.22545
+total_accel_dumbbell        216.42262
+gyros_dumbbell_x            107.08728
+gyros_dumbbell_y            190.24056
+gyros_dumbbell_z             67.67512
+accel_dumbbell_x            188.81641
+accel_dumbbell_y            349.95912
+accel_dumbbell_z            269.03886
+magnet_dumbbell_x           394.01053
+magnet_dumbbell_y           543.98070
+magnet_dumbbell_z           604.65043
+roll_forearm                490.81712
+pitch_forearm               625.85684
+yaw_forearm                 135.64036
+total_accel_forearm          89.82824
+gyros_forearm_x              59.64532
+gyros_forearm_y             100.80003
+gyros_forearm_z              70.12539
+accel_forearm_x             241.66754
+accel_forearm_y             116.26731
+accel_forearm_z             186.12398
+magnet_forearm_x            175.21277
+magnet_forearm_y            174.83201
+magnet_forearm_z            238.05778
+
+Fromt the model it is very clear that roll_belt is the most important feature for the model.
+
+*********************************************************************************
+
+Results for the outof sample test data (https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv):
+
+The file output.csv is enclosed for the results of the out of sample result data.
