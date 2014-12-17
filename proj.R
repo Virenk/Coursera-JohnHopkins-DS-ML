@@ -1,3 +1,11 @@
+
+#@ Author:  Viren\\ viren.virohi@gmail.com \\
+#@Date:     17/12/2014
+# @Usage:   Random forest model to predict the manner of activities
+
+library(caret)
+
+set.seed(13234)
 #set working directory
 setwd("H:/Coursera/jh/proj-ml")
 
@@ -17,8 +25,8 @@ for (i in 1:length(cols))
 colnames(count.na) <- c("Var", "nacount")
 ######################
 
-# will ignore those variables which have more than 10% missing data
-count.na <- count.na[count.na$nacount < 0.1*length(cols),]
+# will ignore those variables which have more than 50% missing data
+count.na <- count.na[count.na$nacount < 0.5*length(cols),]
 
 # get the subset for onyl those who have very less missing na's
 dat <- subset(dat, select = c(count.na$Var))
@@ -57,6 +65,11 @@ confMatrix <- cbind(confMatrix, class.error)
 rfFit$confusion # prints the insample error
 confMatrix      # prints the error for test data
 
+# Insample accuracy
+
+accuracy.train <- sum(diag(rfFit$confusion))/sum(rfFit$confusion[, -6])
+accuracy.test <- sum(diag(confMatrix))/sum(confMatrix[, -6])
+
 
 ### out of sample test data
 testData <- read.csv("pml-testing.csv")
@@ -89,3 +102,16 @@ testPredict <- predict(rfFit, testData)
 testData <- cbind(test, testPredict)
 
 write.csv(testData, "output.csv")
+
+################# Model Insights
+# Features and gini score
+rfFit$importance
+
+# No of trees in the forest
+rfFit$ntree
+
+# number of predictors sampled for spliting at each node.
+rfFit$mtry
+
+# Error rate for all the trees
+rffit$err.rate
